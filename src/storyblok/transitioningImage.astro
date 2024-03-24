@@ -1,0 +1,49 @@
+---
+import { storyblokEditable } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+const { blok } = Astro.props;
+
+// console.log(blok.image);
+// let imageArray = blok.image;
+---
+
+<!-- <div {...storyblokEditable(blok)} class="border-4 border-blue-800">
+  <h1>{blok.heading}</h1>
+  <h1>Transitioning Image</h1>
+  <img
+    id="image"
+    src={blok.image[0].filename}
+    alt={blok.image[0].alt}
+    class=""
+    data-images={JSON.stringify(blok.image.map((image) => image.filename))}
+  />
+</div> --><!-- <div class="container mx-auto flex gap-1">
+  {
+    blok.image?.map((blok) => {
+      console.log(blok.image);
+
+      return <StoryblokComponent blok={blok} />;
+    })
+  }
+  <img src={blok.image?.filename} alt={blok.alt?.filename} class="" />
+</div> --><!-- i cant acesses blok.image from the front matter in the script below, but sending the array via the data atrubute it gets embedded into the HTML , making it avaibile client side.   --><!-- <script>
+  // Access the data-* attribute
+  let imageArray = JSON.parse(document.getElementById("image").dataset.images);
+
+  console.log(imageArray);
+
+  let imageArrayIndex = 0;
+
+  // Function to update the current image index
+  function updateImageIndex() {
+    // console.log(imageArrayIndex);
+    let imageArray = JSON.parse(
+      document.getElementById("image").dataset.images
+    );
+    console.log(imageArray); // Should now log the array of image filenames
+    document.getElementById("image").src = imageArray[imageArrayIndex];
+  }
+
+  // Call the function every 10 seconds
+  setInterval(updateImageIndex, 10000);
+</script> -->

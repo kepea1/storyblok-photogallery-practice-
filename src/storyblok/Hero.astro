@@ -1,0 +1,23 @@
+---
+import { storyblokEditable } from "@storyblok/astro";
+const { blok } = Astro.props;
+
+import { renderRichText } from "@storyblok/astro";
+const renderdescription = renderRichText(blok.description);
+---
+
+<div
+  {...storyblokEditable(blok)}
+  class="relative grid grid-cols-2 items-end p-8 min-h-[80vh] gap-8 text-gray-800"
+>
+  <div class="reletive z-10">
+    <h1 class="text-5xl font-bold mb-4">{blok.headline}</h1>
+    <h1 class="text-3xl">{blok.subheading}</h1>
+  </div>
+  <div set:html={renderdescription} class="text-gray-900 text-opacity-100" />
+  <img
+    src={blok.image.filename}
+    alt={blok.image.alt}
+    class="absolute inset-0 object-cover w-full h-full opacity-50"
+  />
+</div>
