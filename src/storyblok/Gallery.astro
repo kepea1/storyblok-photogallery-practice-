@@ -3,19 +3,16 @@ import { storyblokEditable } from "@storyblok/astro";
 import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
 
 const { blok } = Astro.props;
-console.log(blok.image);
-
-
 ---
 
 <div {...storyblokEditable(blok)}>
+  <h1>{blok.heading}</h1>
   <div class="container mx-auto flex gap-1">
     {
       blok.image?.map((blok) => {
         return <StoryblokComponent blok={blok} />;
       })
     }
-    <!-- <img src={`${blok.image.filename}/m/360x240`} alt={blok.alt?.filename} class="" /> -->
     <img src={blok.image?.filename} alt={blok.alt?.filename} class="" />
   </div>
 </div>

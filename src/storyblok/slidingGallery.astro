@@ -1,0 +1,95 @@
+---
+import { storyblokEditable } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+
+const { blok } = Astro.props;
+---
+
+<div {...storyblokEditable(blok)}>
+  <h1>{blok.heading}</h1>
+  <div class="flex gap-3 object-contain">
+    <img
+      id="dogs-gallery-1"
+      src={blok.image[0].image.filename}
+      alt="
+      puppies!"
+      class="transition-opacity duration-1000 ease-in-out opacity-100"
+      data-images={JSON.stringify(
+        blok.image.map((image) => image.image.filename)
+      )}
+    />
+    <img
+      id="dogs-gallery-2"
+      src={blok.image[1].image.filename}
+      alt="puppies!"
+      class="transition-opacity duration-1000 ease-in-out opacity-100"
+    />
+    <img
+      id="dogs-gallery-3"
+      src={blok.image[2].image.filename}
+      alt="puppies!"
+      class="transition-opacity duration-1000 ease-in-out opacity-100"
+    />
+    <img
+      id="dogs-gallery-4"
+      src={blok.image[3].image.filename}
+      alt="puppies!"
+      class="transition-opacity duration-1000 ease-in-out opacity-100"
+    />
+  </div>
+</div>
+
+<script>
+  //  To refactor this to using .forEach
+  const imageElement1 = document.getElementById("dogs-gallery-1");
+  const imageElement2 = document.getElementById("dogs-gallery-2");
+  const imageElement3 = document.getElementById("dogs-gallery-3");
+  const imageElement4 = document.getElementById("dogs-gallery-4");
+
+  let imageArrayIndex = 0;
+
+  function fadeIn() {
+    imageElement1.classList.remove("opacity-0");
+    imageElement1.classList.add("opacity-100");
+    imageElement2.classList.remove("opacity-0");
+    imageElement2.classList.add("opacity-100");
+    imageElement3.classList.remove("opacity-0");
+    imageElement3.classList.add("opacity-100");
+    imageElement4.classList.remove("opacity-0");
+    imageElement4.classList.add("opacity-100");
+  }
+
+  function fadeOut() {
+    imageElement1.classList.remove("opacity-100");
+    imageElement1.classList.add("opacity-0");
+    imageElement2.classList.remove("opacity-100");
+    imageElement2.classList.add("opacity-0");
+    imageElement3.classList.remove("opacity-100");
+    imageElement3.classList.add("opacity-0");
+    imageElement4.classList.remove("opacity-100");
+    imageElement4.classList.add("opacity-0");
+  }
+
+  // Function to update the current image index
+  function updateImageIndex() {
+    fadeOut();
+    setTimeout(() => {
+      let imageArray = JSON.parse(imageElement1.dataset.images); // saving the images in an array
+
+      imageArrayIndex = (imageArrayIndex + 1) % imageArray.length; // cycling through the images
+
+      imageElement1.src = imageArray[imageArrayIndex];
+      //
+      imageElement2.src = imageArray[imageArrayIndex + 1];
+      //
+      imageElement3.src = imageArray[imageArrayIndex + 2];
+      //
+      imageElement4.src = imageArray[imageArrayIndex + 3];
+      fadeIn();
+    }, 600);
+    // Wait for the fade-out to finish before changing the image and fading in
+  }
+
+  // Call the function every 10 seconds
+  setInterval(updateImageIndex, 5000);
+</script>
