@@ -7,12 +7,11 @@ const { blok } = Astro.props;
 
 <div {...storyblokEditable(blok)}>
   <h1>{blok.heading}</h1>
-  <div class="flex gap-3 object-contain">
+  <div class="flex gap-3 object-contain w-72 h-52">
     <img
       id="dogs-gallery-1"
       src={blok.image[0].image.filename}
-      alt="
-      puppies!"
+      alt="puppies!"
       class="transition-opacity duration-1000 ease-in-out opacity-100"
       data-images={JSON.stringify(
         blok.image.map((image) => image.image.filename)
@@ -40,56 +39,37 @@ const { blok } = Astro.props;
 </div>
 
 <script>
-  //  To refactor this to using .forEach
-  const imageElement1 = document.getElementById("dogs-gallery-1");
-  const imageElement2 = document.getElementById("dogs-gallery-2");
-  const imageElement3 = document.getElementById("dogs-gallery-3");
-  const imageElement4 = document.getElementById("dogs-gallery-4");
-
+  const imageElements = Array.from({ length: 4 }, (_, i) =>
+    document.getElementById(`dogs-gallery-${i + 1}`)
+  );
   let imageArrayIndex = 0;
 
+  function changeOpacity(element, opacity) {
+    element.classList.remove(opacity === 100 ? "opacity-0" : "opacity-100");
+    element.classList.add(opacity === 100 ? "opacity-100" : "opacity-0");
+  }
+
   function fadeIn() {
-    imageElement1.classList.remove("opacity-0");
-    imageElement1.classList.add("opacity-100");
-    imageElement2.classList.remove("opacity-0");
-    imageElement2.classList.add("opacity-100");
-    imageElement3.classList.remove("opacity-0");
-    imageElement3.classList.add("opacity-100");
-    imageElement4.classList.remove("opacity-0");
-    imageElement4.classList.add("opacity-100");
+    imageElements.forEach((element) => changeOpacity(element, 100));
   }
 
   function fadeOut() {
-    imageElement1.classList.remove("opacity-100");
-    imageElement1.classList.add("opacity-0");
-    imageElement2.classList.remove("opacity-100");
-    imageElement2.classList.add("opacity-0");
-    imageElement3.classList.remove("opacity-100");
-    imageElement3.classList.add("opacity-0");
-    imageElement4.classList.remove("opacity-100");
-    imageElement4.classList.add("opacity-0");
+    imageElements.forEach((element) => changeOpacity(element, 0));
   }
 
-  // Function to update the current image index
   function updateImageIndex() {
     fadeOut();
     setTimeout(() => {
-      let imageArray = JSON.parse(imageElement1.dataset.images); // saving the images in an array
+      let imageArray = JSON.parse(imageElements[0].dataset.images);
+      imageArrayIndex = (imageArrayIndex + 1) % imageArray.length;
 
-      imageArrayIndex = (imageArrayIndex + 1) % imageArray.length; // cycling through the images
+      imageElements.forEach((element, index) => {
+        element.src = imageArray[(imageArrayIndex + index) % imageArray.length];
+      });
 
-      imageElement1.src = imageArray[imageArrayIndex];
-      //
-      imageElement2.src = imageArray[imageArrayIndex + 1];
-      //
-      imageElement3.src = imageArray[imageArrayIndex + 2];
-      //
-      imageElement4.src = imageArray[imageArrayIndex + 3];
       fadeIn();
     }, 600);
-    // Wait for the fade-out to finish before changing the image and fading in
   }
 
-  // Call the function every 10 seconds
   setInterval(updateImageIndex, 5000);
 </script>
